@@ -5,7 +5,6 @@ import { type ColumnDef } from '@tanstack/react-table';
 import { DataTable } from '@/components/organisms/DataTable';
 import { ListPageTemplate } from '@/components/templates/ListPageTemplate';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import {
@@ -33,87 +32,140 @@ import { MEMBER_STATUS_OPTIONS, MEMBER_TYPE_OPTIONS, JOIN_TYPE_OPTIONS } from '@
 /* ─── 더미 데이터 (백엔드 연동 전) ─── */
 const MOCK_MEMBERS: Member[] = [
   {
-    MEMBER_ID: 'M001',
-    LOGIN_ID: 'hong001',
+    MEMBER_ID: 'abc1246',
+    MEMBER_NO: 'M031245',
     MEMBER_NM: '홍길동',
-    MEMBER_NM_EN: 'Hong Gildong',
-    BIRTH_DATE: '1985-03-15',
-    MOBILE_NO: '010-1234-5678',
-    EMAIL: 'hong@example.com',
-    DOCTOR_LICENSE_NO: '123-45-67890',
-    DEPT_NM: '내과',
-    POSITION: '과장',
-    MEMBER_TYPE: 'DOCTOR',
-    STATUS: 'ACTIVE',
+    MEMBER_TYPE: 'KMD',
+    BIRTH_DATE: '1983년 08월 16일',
+    DOCTOR_LICENSE_NO: '34562',
+    SCHOOL: '가톨릭대학교',
+    DEPARTMENT: '내과',
+    IS_DIRECTOR: 'Y',
+    SPECIALTY: '일반혈액질환, 림프구계혈액암(림프종, 다발골수종)',
+    EMAIL: 'revehit@naver.com',
+    MOBILE_NO: '010-9288-4290',
+    EMAIL_AGREE: 'Y',
+    SMS_AGREE: 'Y',
+    REPLY_AGREE: 'Y',
+    HOSPITAL_NM: 'A 병원',
+    HOSPITAL_NO: '0651251254',
+    HOSPITAL_TEL: '02-940-2000',
+    HOSPITAL_ADDR: '서울특별시 성북구 동소문로 47길 8 (길음동)',
+    HOSPITAL_ADDR_DETAIL: '404호',
+    HOSPITAL_URL: 'https://www.seoulchuk.com/main.do',
+    STATUS: 'WITHDRAWN',
     JOIN_TYPE: 'NORMAL',
+    INFO_UPDATE_DTTM: '2025-08-27 13:10:25',
+    JOIN_DTTM: '2025-08-27 13:10:25',
+    WITHDRAW_DTTM: '-',
+    LAST_LOGIN_DTTM: '2025-08-27 13:10:25',
+    LAST_LOGIN_IP: '211.108.122.180, 211.108.123.181',
+    DORMANT_DTTM: '-',
     INSERT_DTTM: '2024-01-15 09:30:00',
     UPDATE_DTTM: '2025-06-20 14:22:00',
   },
   {
-    MEMBER_ID: 'M002',
-    LOGIN_ID: 'kim002',
+    MEMBER_ID: 'kim002',
+    MEMBER_NO: 'M031246',
     MEMBER_NM: '김철수',
-    MEMBER_NM_EN: 'Kim Cheolsu',
-    BIRTH_DATE: '1990-07-22',
-    MOBILE_NO: '010-9876-5432',
-    EMAIL: 'kim@example.com',
-    DOCTOR_LICENSE_NO: '234-56-78901',
-    DEPT_NM: '외과',
-    POSITION: '전문의',
     MEMBER_TYPE: 'DENTIST',
+    BIRTH_DATE: '1990-07-22',
+    DOCTOR_LICENSE_NO: '23456',
+    SCHOOL: '서울대학교',
+    DEPARTMENT: '외과',
+    IS_DIRECTOR: 'N',
+    EMAIL: 'kim@example.com',
+    MOBILE_NO: '010-9876-5432',
+    EMAIL_AGREE: 'Y',
+    SMS_AGREE: 'N',
+    REPLY_AGREE: 'Y',
+    HOSPITAL_NM: 'B 병원',
+    HOSPITAL_NO: '0651251255',
+    HOSPITAL_TEL: '02-123-4567',
     STATUS: 'ACTIVE',
     JOIN_TYPE: 'NORMAL',
+    JOIN_DTTM: '2024-03-10 11:00:00',
+    INFO_UPDATE_DTTM: '2025-05-18 10:15:00',
+    DORMANT_DTTM: '-',
     INSERT_DTTM: '2024-03-10 11:00:00',
     UPDATE_DTTM: '2025-05-18 10:15:00',
   },
   {
-    MEMBER_ID: 'M003',
-    LOGIN_ID: 'lee003',
+    MEMBER_ID: 'lee003',
+    MEMBER_NO: 'M031247',
     MEMBER_NM: '이영희',
-    MEMBER_NM_EN: 'Lee Younghee',
+    MEMBER_TYPE: 'DOCTOR',
     BIRTH_DATE: '1988-11-03',
-    MOBILE_NO: '010-5555-1234',
+    DOCTOR_LICENSE_NO: '34567',
+    SCHOOL: '연세대학교',
+    DEPARTMENT: '소아과',
+    IS_DIRECTOR: 'N',
     EMAIL: 'lee@example.com',
-    DOCTOR_LICENSE_NO: '345-67-89012',
-    DEPT_NM: '소아과',
-    POSITION: '부장',
-    MEMBER_TYPE: 'KMD',
+    MOBILE_NO: '010-5555-1234',
+    EMAIL_AGREE: 'N',
+    SMS_AGREE: 'Y',
+    REPLY_AGREE: 'N',
+    HOSPITAL_NM: 'C 의원',
+    HOSPITAL_NO: '0651251256',
+    HOSPITAL_TEL: '02-555-6789',
     STATUS: 'ACTIVE',
     JOIN_TYPE: 'SMS',
+    JOIN_DTTM: '2024-05-20 08:45:00',
+    INFO_UPDATE_DTTM: '2025-04-12 16:30:00',
+    DORMANT_DTTM: '-',
     INSERT_DTTM: '2024-05-20 08:45:00',
     UPDATE_DTTM: '2025-04-12 16:30:00',
   },
   {
-    MEMBER_ID: 'M004',
-    LOGIN_ID: 'park004',
+    MEMBER_ID: 'park004',
+    MEMBER_NO: 'M031248',
     MEMBER_NM: '박민수',
-    MEMBER_NM_EN: 'Park Minsu',
-    BIRTH_DATE: '1975-01-30',
-    MOBILE_NO: '010-3333-7777',
-    EMAIL: 'park@example.com',
-    DOCTOR_LICENSE_NO: '456-78-90123',
-    DEPT_NM: '정형외과',
-    POSITION: '전문의',
     MEMBER_TYPE: 'DOCTOR',
+    BIRTH_DATE: '1975-01-30',
+    DOCTOR_LICENSE_NO: '45678',
+    SCHOOL: '고려대학교',
+    DEPARTMENT: '정형외과',
+    IS_DIRECTOR: 'Y',
+    EMAIL: 'park@example.com',
+    MOBILE_NO: '010-3333-7777',
+    EMAIL_AGREE: 'Y',
+    SMS_AGREE: 'Y',
+    REPLY_AGREE: 'Y',
+    HOSPITAL_NM: 'D 병원',
+    HOSPITAL_NO: '0651251257',
+    HOSPITAL_TEL: '02-777-8888',
     STATUS: 'WITHDRAWN',
     JOIN_TYPE: 'NORMAL',
+    JOIN_DTTM: '2023-12-01 14:20:00',
+    INFO_UPDATE_DTTM: '2025-02-28 09:00:00',
+    WITHDRAW_DTTM: '2025-03-15 10:00:00',
+    DORMANT_DTTM: '-',
     INSERT_DTTM: '2023-12-01 14:20:00',
     UPDATE_DTTM: '2025-02-28 09:00:00',
   },
   {
-    MEMBER_ID: 'M005',
-    LOGIN_ID: 'choi005',
+    MEMBER_ID: 'choi005',
+    MEMBER_NO: 'M031249',
     MEMBER_NM: '최수진',
-    MEMBER_NM_EN: 'Choi Sujin',
-    BIRTH_DATE: '1992-09-18',
-    MOBILE_NO: '010-8888-4444',
-    EMAIL: 'choi@example.com',
-    DOCTOR_LICENSE_NO: '567-89-01234',
-    DEPT_NM: '피부과',
-    POSITION: '과장',
     MEMBER_TYPE: 'DENTIST',
+    BIRTH_DATE: '1992-09-18',
+    DOCTOR_LICENSE_NO: '56789',
+    SCHOOL: '경희대학교',
+    DEPARTMENT: '피부과',
+    IS_DIRECTOR: 'N',
+    EMAIL: 'choi@example.com',
+    MOBILE_NO: '010-8888-4444',
+    EMAIL_AGREE: 'N',
+    SMS_AGREE: 'N',
+    REPLY_AGREE: 'Y',
+    HOSPITAL_NM: 'E 의원',
+    HOSPITAL_NO: '0651251258',
+    HOSPITAL_TEL: '02-444-5555',
     STATUS: 'ACTIVE',
-    JOIN_TYPE: 'SMS',
+    JOIN_TYPE: 'NORMAL',
+    JOIN_DTTM: '2024-08-05 10:10:00',
+    INFO_UPDATE_DTTM: '2025-07-01 11:45:00',
+    DORMANT_DTTM: '-',
     INSERT_DTTM: '2024-08-05 10:10:00',
     UPDATE_DTTM: '2025-07-01 11:45:00',
   },
@@ -122,6 +174,11 @@ const MOCK_MEMBERS: Member[] = [
 /* ─── 상태/가입유형 라벨 변환 ─── */
 const statusLabel = (val?: string) => {
   const found = MEMBER_STATUS_OPTIONS.find((o) => o.value === val);
+  return found?.label ?? val ?? '-';
+};
+
+const memberTypeLabel = (val?: string) => {
+  const found = MEMBER_TYPE_OPTIONS.find((o) => o.value === val);
   return found?.label ?? val ?? '-';
 };
 
@@ -188,27 +245,6 @@ function FieldGroup({
   );
 }
 
-/* ─── 상세 폼 라벨+인풋 (수직 테이블) ─── */
-function FormField({
-  label,
-  required,
-  children,
-}: {
-  label: string;
-  required?: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="grid grid-cols-[140px_1fr] items-center gap-2">
-      <Label className="text-sm font-semibold text-foreground whitespace-nowrap">
-        {label}
-        {required && <span className="text-destructive ml-0.5">*</span>}
-      </Label>
-      {children}
-    </div>
-  );
-}
-
 /* ═══════════════════════════════════════
    회원관리 페이지
    ═══════════════════════════════════════ */
@@ -233,10 +269,12 @@ export default function MemberPage() {
   /* ─── 상세 다이얼로그 ─── */
   const [detailOpen, setDetailOpen] = useState(false);
   const [formData, setFormData] = useState<Partial<Member>>({});
-  const [isNew, setIsNew] = useState(false);
 
-  /* ─── 비밀번호 초기화 다이얼로그 ─── */
+  /* ─── 확인 다이얼로그 ─── */
   const [pwResetOpen, setPwResetOpen] = useState(false);
+  const [withdrawOpen, setWithdrawOpen] = useState(false);
+  const [saveConfirmOpen, setSaveConfirmOpen] = useState(false);
+  const [cancelConfirmOpen, setCancelConfirmOpen] = useState(false);
 
   /* ─── 검색 ─── */
   const handleSearch = useCallback(() => {
@@ -281,34 +319,13 @@ export default function MemberPage() {
   /* ─── 행 클릭 → 상세 팝업 ─── */
   const handleRowClick = (row: Member) => {
     setFormData({ ...row });
-    setIsNew(false);
-    setDetailOpen(true);
-  };
-
-  /* ─── 신규 등록 ─── */
-  const handleNewMember = () => {
-    setFormData({});
-    setIsNew(true);
     setDetailOpen(true);
   };
 
   /* ─── 저장 (TODO: API 연동) ─── */
   const handleSave = () => {
-    if (!formData.LOGIN_ID?.trim()) {
-      toast.error('로그인 ID는 필수 입력입니다.');
-      return;
-    }
-    if (!formData.MEMBER_NM?.trim()) {
-      toast.error('이름은 필수 입력입니다.');
-      return;
-    }
-    toast.success(isNew ? '회원이 등록되었습니다.' : '회원 정보가 수정되었습니다.');
-    setDetailOpen(false);
-  };
-
-  /* ─── 삭제 (TODO: API 연동) ─── */
-  const handleDelete = () => {
-    toast.success('회원이 삭제되었습니다.');
+    toast.success('회원 정보가 수정되었습니다.');
+    setSaveConfirmOpen(false);
     setDetailOpen(false);
   };
 
@@ -429,269 +446,291 @@ export default function MemberPage() {
 
       {/* ═══ 회원 조회 및 수정 다이얼로그 ═══ */}
       <Dialog open={detailOpen} onOpenChange={setDetailOpen}>
-        <DialogContent size="lg" className="max-h-[90vh] overflow-y-auto">
+        <DialogContent size="lg" className="max-h-[90vh] flex flex-col">
           <DialogHeader>
-            <DialogTitle>{isNew ? '회원 등록' : '회원 조회 및 수정'}</DialogTitle>
+            <DialogTitle>회원 조회 및 수정</DialogTitle>
             <DialogDescription>
-              {isNew ? '새 회원 정보를 입력합니다.' : '회원 정보를 조회하고 수정할 수 있습니다.'}
+              회원 정보를 조회하고 수정할 수 있습니다.
             </DialogDescription>
           </DialogHeader>
 
-          <DialogBody className="space-y-6">
-            {/* ─── 기본 정보 ─── */}
-            <div className="grid grid-cols-2 gap-x-8 gap-y-4">
-              <FormField label="로그인 ID" required>
-                <Input
-                  value={formData.LOGIN_ID || ''}
-                  onChange={(e) => updateField('LOGIN_ID', e.target.value)}
-                  placeholder="로그인 ID"
-                  disabled={!isNew}
-                />
-              </FormField>
-              <FormField label="이름" required>
-                <Input
-                  value={formData.MEMBER_NM || ''}
-                  onChange={(e) => updateField('MEMBER_NM', e.target.value)}
-                  placeholder="이름"
-                />
-              </FormField>
-              <FormField label="영문이름">
-                <Input
-                  value={formData.MEMBER_NM_EN || ''}
-                  onChange={(e) => updateField('MEMBER_NM_EN', e.target.value)}
-                  placeholder="영문이름"
-                />
-              </FormField>
-              <FormField label="생년월일">
-                <Input
-                  value={formData.BIRTH_DATE || ''}
-                  onChange={(e) => updateField('BIRTH_DATE', e.target.value)}
-                  placeholder="YYYY-MM-DD"
-                />
-              </FormField>
-              <FormField label="부서코드">
-                <Input
-                  value={formData.DEPT_CODE || ''}
-                  onChange={(e) => updateField('DEPT_CODE', e.target.value)}
-                  placeholder="부서코드"
-                />
-              </FormField>
-              <FormField label="직급">
-                <Input
-                  value={formData.POSITION || ''}
-                  onChange={(e) => updateField('POSITION', e.target.value)}
-                  placeholder="직급"
-                />
-              </FormField>
-              <FormField label="기관코드">
-                <Input
-                  value={formData.ORG_CODE || ''}
-                  onChange={(e) => updateField('ORG_CODE', e.target.value)}
-                  placeholder="기관코드"
-                />
-              </FormField>
-              <FormField label="홈페이지">
-                <Input
-                  value={formData.HOMEPAGE || ''}
-                  onChange={(e) => updateField('HOMEPAGE', e.target.value)}
-                  placeholder="홈페이지 URL"
-                />
-              </FormField>
-              <FormField label="휴대전화번호" required>
-                <Input
-                  value={formData.MOBILE_NO || ''}
-                  onChange={(e) => updateField('MOBILE_NO', e.target.value)}
-                  placeholder="010-0000-0000"
-                />
-              </FormField>
-              <FormField label="전화번호">
-                <Input
-                  value={formData.PHONE_NO || ''}
-                  onChange={(e) => updateField('PHONE_NO', e.target.value)}
-                  placeholder="전화번호"
-                />
-              </FormField>
-              <FormField label="팩스(FAX)">
-                <Input
-                  value={formData.FAX_NO || ''}
-                  onChange={(e) => updateField('FAX_NO', e.target.value)}
-                  placeholder="FAX 번호"
-                />
-              </FormField>
-              <FormField label="이메일">
-                <Input
-                  value={formData.EMAIL || ''}
-                  onChange={(e) => updateField('EMAIL', e.target.value)}
-                  placeholder="이메일"
-                />
-              </FormField>
+          <DialogBody className="space-y-5 overflow-y-auto">
+            {/* ─── Row 1: 회원ID, 회원번호, 회원명 ─── */}
+            <div className="grid grid-cols-3 gap-4">
+              <FieldGroup label="회원ID">
+                <Input value={formData.MEMBER_ID || ''} disabled />
+              </FieldGroup>
+              <FieldGroup label="회원번호">
+                <Input value={formData.MEMBER_NO || ''} disabled />
+              </FieldGroup>
+              <FieldGroup label="회원명">
+                <Input value={formData.MEMBER_NM || ''} disabled />
+              </FieldGroup>
             </div>
 
-            {/* ─── 메모 ─── */}
-            <div className="grid grid-cols-[140px_1fr] gap-2">
-              <Label className="text-sm font-semibold text-foreground pt-2">메모기입사항</Label>
+            {/* ─── Row 2: 회원구분, 생년월일, 의사면허번호 ─── */}
+            <div className="grid grid-cols-3 gap-4">
+              <FieldGroup label="회원구분">
+                <Input value={memberTypeLabel(formData.MEMBER_TYPE)} disabled />
+              </FieldGroup>
+              <FieldGroup label="생년월일">
+                <Input value={formData.BIRTH_DATE || ''} disabled />
+              </FieldGroup>
+              <FieldGroup label="의사면허번호">
+                <Input value={formData.DOCTOR_LICENSE_NO || ''} disabled />
+              </FieldGroup>
+            </div>
+
+            {/* ─── Row 3: 출신학교, 진료과, 원장여부 ─── */}
+            <div className="grid grid-cols-3 gap-4">
+              <FieldGroup label="출신학교">
+                <Input value={formData.SCHOOL || ''} disabled />
+              </FieldGroup>
+              <FieldGroup label="진료과">
+                <Input value={formData.DEPARTMENT || ''} disabled />
+              </FieldGroup>
+              <FieldGroup label="원장여부">
+                <div className="flex items-center h-10 gap-4">
+                  <label className="flex items-center gap-1.5 text-sm">
+                    <input
+                      type="radio"
+                      name="isDirector"
+                      className="accent-primary"
+                      checked={formData.IS_DIRECTOR === 'Y'}
+                      disabled
+                    />
+                    원장
+                  </label>
+                  <label className="flex items-center gap-1.5 text-sm">
+                    <input
+                      type="radio"
+                      name="isDirector"
+                      className="accent-primary"
+                      checked={formData.IS_DIRECTOR !== 'Y'}
+                      disabled
+                    />
+                    비원장
+                  </label>
+                </div>
+              </FieldGroup>
+            </div>
+
+            {/* ─── 세부전공 (full width) ─── */}
+            <FieldGroup label="세부전공">
+              <Input value={formData.SPECIALTY || ''} disabled />
+            </FieldGroup>
+
+            {/* ─── 이메일, 휴대전화번호 (2 col) ─── */}
+            <div className="grid grid-cols-2 gap-4">
+              <FieldGroup label="이메일">
+                <Input value={formData.EMAIL || ''} disabled />
+              </FieldGroup>
+              <FieldGroup label="휴대전화번호">
+                <Input value={formData.MOBILE_NO || ''} disabled />
+              </FieldGroup>
+            </div>
+
+            {/* ─── 수신 동의 여부 (3 col radios) ─── */}
+            <div className="grid grid-cols-3 gap-4">
+              <FieldGroup label="이메일 수신 동의 여부">
+                <div className="flex items-center h-10 gap-4">
+                  <label className="flex items-center gap-1.5 text-sm">
+                    <input
+                      type="radio"
+                      name="emailAgree"
+                      className="accent-primary"
+                      checked={formData.EMAIL_AGREE === 'Y'}
+                      disabled
+                    />
+                    동의
+                  </label>
+                  <label className="flex items-center gap-1.5 text-sm">
+                    <input
+                      type="radio"
+                      name="emailAgree"
+                      className="accent-primary"
+                      checked={formData.EMAIL_AGREE !== 'Y'}
+                      disabled
+                    />
+                    미동의
+                  </label>
+                </div>
+              </FieldGroup>
+              <FieldGroup label="SMS 수신 동의 여부">
+                <div className="flex items-center h-10 gap-4">
+                  <label className="flex items-center gap-1.5 text-sm">
+                    <input
+                      type="radio"
+                      name="smsAgree"
+                      className="accent-primary"
+                      checked={formData.SMS_AGREE === 'Y'}
+                      disabled
+                    />
+                    동의
+                  </label>
+                  <label className="flex items-center gap-1.5 text-sm">
+                    <input
+                      type="radio"
+                      name="smsAgree"
+                      className="accent-primary"
+                      checked={formData.SMS_AGREE !== 'Y'}
+                      disabled
+                    />
+                    미동의
+                  </label>
+                </div>
+              </FieldGroup>
+              <FieldGroup label="회신서 동의 여부">
+                <div className="flex items-center h-10 gap-4">
+                  <label className="flex items-center gap-1.5 text-sm">
+                    <input
+                      type="radio"
+                      name="replyAgree"
+                      className="accent-primary"
+                      checked={formData.REPLY_AGREE === 'Y'}
+                      disabled
+                    />
+                    동의
+                  </label>
+                  <label className="flex items-center gap-1.5 text-sm">
+                    <input
+                      type="radio"
+                      name="replyAgree"
+                      className="accent-primary"
+                      checked={formData.REPLY_AGREE !== 'Y'}
+                      disabled
+                    />
+                    미동의
+                  </label>
+                </div>
+              </FieldGroup>
+            </div>
+
+            {/* ─── 병원정보 섹션 ─── */}
+            <div className="border-t border-gray-500 pt-5">
+              <h3 className="text-base font-semibold mb-4">병원정보</h3>
+
+              <div className="space-y-4">
+                {/* 병원명, 요양기관번호, 대표전화 */}
+                <div className="grid grid-cols-3 gap-4">
+                  <FieldGroup label="병원명">
+                    <Input value={formData.HOSPITAL_NM || ''} disabled />
+                  </FieldGroup>
+                  <FieldGroup label="요양기관번호">
+                    <Input value={formData.HOSPITAL_NO || ''} disabled />
+                  </FieldGroup>
+                  <FieldGroup label="대표전화">
+                    <Input value={formData.HOSPITAL_TEL || ''} disabled />
+                  </FieldGroup>
+                </div>
+
+                {/* 병원주소 (full width, 2 inputs) */}
+                <FieldGroup label="병원주소">
+                  <div className="flex gap-2">
+                    <Input
+                      value={formData.HOSPITAL_ADDR || ''}
+                      disabled
+                      className="flex-1"
+                    />
+                    <Input
+                      value={formData.HOSPITAL_ADDR_DETAIL || ''}
+                      disabled
+                      className="flex-1"
+                    />
+                  </div>
+                </FieldGroup>
+
+                {/* 병원 홈페이지 주소 */}
+                <FieldGroup label="병원 홈페이지 주소">
+                  <Input value={formData.HOSPITAL_URL || ''} disabled />
+                </FieldGroup>
+              </div>
+            </div>
+
+            {/* ─── 상태 정보 테이블 (빨간 테두리) ─── */}
+            <div className="overflow-hidden rounded-lg border border-gray-500">
+              <table className="w-full text-sm">
+                <tbody>
+                  <tr className="border-b border-gray-500">
+                    <th className="bg-gray-300 px-4 py-2.5 text-left font-semibold whitespace-nowrap">
+                      회원상태
+                    </th>
+                    <td className="px-4 py-2.5">
+                      <span
+                        className={
+                          formData.STATUS === 'ACTIVE'
+                            ? 'text-src-point font-medium'
+                            : formData.STATUS === 'WITHDRAWN'
+                              ? 'text-src-red font-medium'
+                              : ''
+                        }
+                      >
+                        {statusLabel(formData.STATUS)}
+                      </span>
+                    </td>
+                    <th className="bg-gray-300 px-4 py-2.5 text-left font-semibold whitespace-nowrap">
+                      가입유형
+                    </th>
+                    <td className="px-4 py-2.5">{joinTypeLabel(formData.JOIN_TYPE)}</td>
+                    <th className="bg-gray-300 px-4 py-2.5 text-left font-semibold whitespace-nowrap">
+                      회원가입일시
+                    </th>
+                    <td className="px-4 py-2.5">{formData.JOIN_DTTM || '-'}</td>
+                  </tr>
+                  <tr className="border-b border-gray-500">
+                    <th className="bg-gray-300 px-4 py-2.5 text-left font-semibold whitespace-nowrap">
+                      회원정보수정일시
+                    </th>
+                    <td className="px-4 py-2.5">{formData.INFO_UPDATE_DTTM || '-'}</td>
+                    <th className="bg-gray-300 px-4 py-2.5 text-left font-semibold whitespace-nowrap">
+                      휴면계정 전환일
+                    </th>
+                    <td className="px-4 py-2.5">{formData.DORMANT_DTTM || '-'}</td>
+                    <th className="bg-gray-300 px-4 py-2.5 text-left font-semibold whitespace-nowrap">
+                      회원탈퇴일시
+                    </th>
+                    <td className="px-4 py-2.5">{formData.WITHDRAW_DTTM || '-'}</td>
+                  </tr>
+                  <tr>
+                    <th className="bg-gray-300 px-4 py-2.5 text-left font-semibold whitespace-nowrap">
+                      마지막로그인일시
+                    </th>
+                    <td className="px-4 py-2.5">{formData.LAST_LOGIN_DTTM || '-'}</td>
+                    <th className="bg-gray-300 px-4 py-2.5 text-left font-semibold whitespace-nowrap">
+                      마지막로그인IP
+                    </th>
+                    <td className="px-4 py-2.5" colSpan={3}>{formData.LAST_LOGIN_IP || '-'}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            {/* ─── 비고 (관리자용 - 유일하게 수정 가능) ─── */}
+            <FieldGroup label="비고">
               <Textarea
                 value={formData.MEMO || ''}
                 onChange={(e) => updateField('MEMO', e.target.value)}
-                placeholder="메모를 입력하세요."
+                placeholder="회원에 대한 특이사항을 기재하세요."
                 rows={3}
               />
-            </div>
-
-            {/* ─── 비밀번호 (수정 시) ─── */}
-            {!isNew && (
-              <div className="border-t border-gray-500 pt-4">
-                <h3 className="text-base font-semibold mb-4">비밀번호</h3>
-                <div className="grid grid-cols-2 gap-x-8 gap-y-4">
-                  <FormField label="비밀번호">
-                    <Input
-                      type="password"
-                      value={formData.PASSWORD || ''}
-                      onChange={(e) => updateField('PASSWORD', e.target.value)}
-                      placeholder="비밀번호"
-                    />
-                  </FormField>
-                  <FormField label="비밀번호 확인">
-                    <Input
-                      type="password"
-                      value={formData.PASSWORD_CONFIRM || ''}
-                      onChange={(e) => updateField('PASSWORD_CONFIRM', e.target.value)}
-                      placeholder="비밀번호 확인"
-                    />
-                  </FormField>
-                </div>
-                <div className="mt-3">
-                  <Button
-                    variant="outline-red"
-                    size="sm"
-                    onClick={() => setPwResetOpen(true)}
-                  >
-                    비밀번호 초기화
-                  </Button>
-                </div>
-              </div>
-            )}
-
-            {/* ─── 비밀번호 (신규 등록 시) ─── */}
-            {isNew && (
-              <div className="border-t border-gray-500 pt-4">
-                <h3 className="text-base font-semibold mb-4">비밀번호</h3>
-                <div className="grid grid-cols-2 gap-x-8 gap-y-4">
-                  <FormField label="비밀번호" required>
-                    <Input
-                      type="password"
-                      value={formData.PASSWORD || ''}
-                      onChange={(e) => updateField('PASSWORD', e.target.value)}
-                      placeholder="비밀번호"
-                    />
-                  </FormField>
-                  <FormField label="비밀번호 확인" required>
-                    <Input
-                      type="password"
-                      value={formData.PASSWORD_CONFIRM || ''}
-                      onChange={(e) => updateField('PASSWORD_CONFIRM', e.target.value)}
-                      placeholder="비밀번호 확인"
-                    />
-                  </FormField>
-                </div>
-              </div>
-            )}
-
-            {/* ─── 옵션 (라디오) ─── */}
-            <div className="border-t border-gray-500 pt-4">
-              <div className="grid grid-cols-2 gap-x-8 gap-y-4">
-                <FormField label="의사여부">
-                  <div className="flex gap-4">
-                    <label className="flex items-center gap-1.5 text-sm cursor-pointer">
-                      <input
-                        type="radio"
-                        name="isDoctor"
-                        className="accent-primary"
-                        checked={formData.IS_DOCTOR === 'Y'}
-                        onChange={() => updateField('IS_DOCTOR', 'Y')}
-                      />
-                      의사
-                    </label>
-                    <label className="flex items-center gap-1.5 text-sm cursor-pointer">
-                      <input
-                        type="radio"
-                        name="isDoctor"
-                        className="accent-primary"
-                        checked={formData.IS_DOCTOR !== 'Y'}
-                        onChange={() => updateField('IS_DOCTOR', 'N')}
-                      />
-                      비의사
-                    </label>
-                  </div>
-                </FormField>
-                <FormField label="관리자여부">
-                  <div className="flex gap-4">
-                    <label className="flex items-center gap-1.5 text-sm cursor-pointer">
-                      <input
-                        type="radio"
-                        name="isAdmin"
-                        className="accent-primary"
-                        checked={formData.IS_ADMIN === 'Y'}
-                        onChange={() => updateField('IS_ADMIN', 'Y')}
-                      />
-                      관리자
-                    </label>
-                    <label className="flex items-center gap-1.5 text-sm cursor-pointer">
-                      <input
-                        type="radio"
-                        name="isAdmin"
-                        className="accent-primary"
-                        checked={formData.IS_ADMIN !== 'Y'}
-                        onChange={() => updateField('IS_ADMIN', 'N')}
-                      />
-                      일반
-                    </label>
-                  </div>
-                </FormField>
-                <FormField label="상태">
-                  <Select
-                    value={formData.STATUS || 'ACTIVE'}
-                    onValueChange={(v) => updateField('STATUS', v)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="ACTIVE">정상</SelectItem>
-                      <SelectItem value="WITHDRAWN">탈퇴</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </FormField>
-                <FormField label="가입유형">
-                  <Select
-                    value={formData.JOIN_TYPE || 'NORMAL'}
-                    onValueChange={(v) => updateField('JOIN_TYPE', v)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="NORMAL">일반회원</SelectItem>
-                      <SelectItem value="SMS">SMS회원</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </FormField>
-              </div>
-            </div>
+            </FieldGroup>
           </DialogBody>
 
-          <DialogFooter>
-            <Button variant="default" onClick={handleSave}>
-              {isNew ? '회원 등록' : '회원정보 저장'}
-            </Button>
-            {!isNew && (
-              <Button variant="destructive" onClick={handleDelete}>
-                삭제
+          <DialogFooter className="justify-between">
+            <div className="flex gap-2">
+              <Button onClick={() => setPwResetOpen(true)}>비밀번호 초기화</Button>
+              <Button variant="destructive" onClick={() => setWithdrawOpen(true)}>
+                탈퇴처리
               </Button>
-            )}
-            <Button variant="outline" onClick={() => setDetailOpen(false)}>
-              닫기
-            </Button>
+            </div>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => setCancelConfirmOpen(true)}>
+                취소
+              </Button>
+              <Button variant="dark" onClick={() => setSaveConfirmOpen(true)}>
+                저장
+              </Button>
+            </div>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -701,10 +740,46 @@ export default function MemberPage() {
         open={pwResetOpen}
         onOpenChange={setPwResetOpen}
         title="비밀번호 초기화"
-        description="회원의 비밀번호를 초기 비밀번호로 초기화하시겠습니까? 초기화된 비밀번호는 회원에게 SMS로 발송됩니다."
+        description="비밀번호를 초기화하시겠습니까? 초기화된 비밀번호는 회원의 휴대전화번호로 전송됩니다."
         onConfirm={() => {
-          toast.success('비밀번호가 초기화되었습니다.');
+          toast.success('비밀번호가 초기화되었습니다. 회원의 휴대전화번호로 전송되었습니다.');
           setPwResetOpen(false);
+        }}
+        destructive
+      />
+
+      {/* ═══ 탈퇴처리 확인 ═══ */}
+      <ConfirmDialog
+        open={withdrawOpen}
+        onOpenChange={setWithdrawOpen}
+        title="탈퇴처리"
+        description="해당 회원을 탈퇴 처리하시겠습니까?"
+        onConfirm={() => {
+          toast.success('회원이 탈퇴 처리되었습니다.');
+          setWithdrawOpen(false);
+          setDetailOpen(false);
+        }}
+        destructive
+      />
+
+      {/* ═══ 저장 확인 ═══ */}
+      <ConfirmDialog
+        open={saveConfirmOpen}
+        onOpenChange={setSaveConfirmOpen}
+        title="저장"
+        description="수정한 내용으로 저장하시겠습니까?"
+        onConfirm={handleSave}
+      />
+
+      {/* ═══ 취소 확인 ═══ */}
+      <ConfirmDialog
+        open={cancelConfirmOpen}
+        onOpenChange={setCancelConfirmOpen}
+        title="취소"
+        description="취소 시 수정한 내용이 저장되지 않습니다. 취소하시겠습니까?"
+        onConfirm={() => {
+          setCancelConfirmOpen(false);
+          setDetailOpen(false);
         }}
         destructive
       />

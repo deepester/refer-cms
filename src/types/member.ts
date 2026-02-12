@@ -2,29 +2,37 @@ import type { AuditFields } from './api';
 
 export interface Member extends AuditFields {
   MEMBER_ID: string;
+  MEMBER_NO?: string;
   MEMBER_NM: string;
   MEMBER_NM_EN?: string;
+  MEMBER_TYPE?: string;
   BIRTH_DATE?: string;
-  MOBILE_NO?: string;
-  PHONE_NO?: string;
-  FAX_NO?: string;
-  EMAIL?: string;
   DOCTOR_LICENSE_NO?: string;
-  DEPT_CODE?: string;
-  DEPT_NM?: string;
-  POSITION?: string;
+  SCHOOL?: string;
+  DEPARTMENT?: string;
+  IS_DIRECTOR?: string;
+  SPECIALTY?: string;
+  EMAIL?: string;
+  MOBILE_NO?: string;
+  EMAIL_AGREE?: string;
+  SMS_AGREE?: string;
+  REPLY_AGREE?: string;
+  HOSPITAL_NM?: string;
+  HOSPITAL_NO?: string;
+  HOSPITAL_TEL?: string;
+  HOSPITAL_ADDR?: string;
+  HOSPITAL_ADDR_DETAIL?: string;
+  HOSPITAL_URL?: string;
   STATUS?: string;
   JOIN_TYPE?: string;
+  JOIN_DTTM?: string;
+  INFO_UPDATE_DTTM?: string;
+  WITHDRAW_DTTM?: string;
+  LAST_LOGIN_DTTM?: string;
+  LAST_LOGIN_IP?: string;
+  DORMANT_DTTM?: string;
   MEMO?: string;
-  PASSWORD?: string;
-  PASSWORD_CONFIRM?: string;
-  MEMBER_TYPE?: string;
-  IS_DOCTOR?: string;
-  AUTH_LEVEL?: string;
-  IS_ADMIN?: string;
   LOGIN_ID?: string;
-  ORG_CODE?: string;
-  HOMEPAGE?: string;
 }
 
 /** 회원상태 옵션 */
