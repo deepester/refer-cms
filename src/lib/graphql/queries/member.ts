@@ -15,6 +15,9 @@ export const GET_ADMIN_USERS_MEMBERS = gql`
         hospitalCode
         createdAt
         updatedAt
+        profile {
+          licenseNo
+        }
       }
       totalCount
       hasNextPage
@@ -36,6 +39,9 @@ export const GET_ADMIN_USER_BY_ID = gql`
       hospitalCode
       mustChangePw
       rejectReason
+      lastLoginAt
+      lastLoginIp
+      withdrawnAt
       createdAt
       updatedAt
       profile {

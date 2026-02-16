@@ -16,6 +16,7 @@ export const GET_ADMIN_PARTNER_APPLICATIONS = gql`
         directorPhone
         approvedAt
         reviewedAt
+        reviewedById
         rejectReason
         createdAt
         updatedAt
@@ -32,6 +33,7 @@ export const GET_ADMIN_PARTNER_APPLICATIONS = gql`
           specialties
           partnerType
           classificationCode
+          phisCode
         }
       }
       totalCount
@@ -53,11 +55,69 @@ export const GET_ADMIN_PARTNER_APPLICATION_BY_ID = gql`
       staffEmail
       directorName
       directorPhone
+      directorLicenseNo
+      directorBirthDate
+      directorGender
+      directorEmail
+      directorSchool
+      directorGraduationYear
+      directorTrainingHospital
+      directorDepartment
+      directorSubSpecialty
+      directorCarNo
+      directorEmailConsent
+      directorSmsConsent
+      directorReplyConsent
+      isDirector
+      institutionType
+      staffPosition
+      staffTel
+      staffDeptType
+      staffDeptValue
+      remarks
+      attachments
       approvedAt
       reviewedAt
+      reviewedById
       rejectReason
       createdAt
       updatedAt
+      # 체크리스트 항목
+      activeBedCount
+      totalBedCount
+      premiumRoomCount
+      multiRoomCount
+      icuCount
+      erCount
+      nurseCount
+      specialistCount
+      totalStaffCount
+      hasDialysisRoom
+      hasEr
+      hasHospice
+      hasIcu
+      hasOperatingRoom
+      hasPhysicalTherapy
+      hasPsychClosed
+      hasPsychGeneral
+      hasIntegratedNursing
+      hasGuardianCare
+      hasSharedCare
+      hasRehabIsolation
+      hasRehabOt
+      hasRehabPt
+      hasRehabSt
+      hasRehabSwallow
+      isolationRoomCount
+      isolationSingleCount
+      isolationDoubleCount
+      isolationTripleCount
+      isolationTypes
+      isolationCareType
+      isolationRehabType
+      majorEquipment
+      availableTreatments
+      departmentSpecialists
       hospital {
         id
         name
@@ -71,6 +131,7 @@ export const GET_ADMIN_PARTNER_APPLICATION_BY_ID = gql`
         specialties
         partnerType
         classificationCode
+        phisCode
       }
     }
   }

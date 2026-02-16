@@ -1,13 +1,19 @@
 'use client';
 
-import { useState, useCallback } from 'react';
-import { useQuery, useLazyQuery, useMutation } from '@apollo/client/react';
-import { type ColumnDef } from '@tanstack/react-table';
+import { ConfirmDialog } from '@/components/molecules/ConfirmDialog';
 import { DataTable } from '@/components/organisms/DataTable';
 import { ListPageTemplate } from '@/components/templates/ListPageTemplate';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
+import {
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -15,30 +21,38 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogBody,
-  DialogFooter,
-  DialogDescription,
-} from '@/components/ui/dialog';
-import { ConfirmDialog } from '@/components/molecules/ConfirmDialog';
-import { toast } from 'sonner';
+import { Textarea } from '@/components/ui/textarea';
 import { DEFAULT_PAGE_SIZE } from '@/lib/constants';
 import {
+  ADMIN_UPDATE_USER,
   GET_ADMIN_USERS_MEMBERS,
   GET_ADMIN_USER_BY_ID,
-  ADMIN_UPDATE_USER,
 } from '@/lib/graphql/queries/member';
 import type {
   AdminUser,
-  AdminUsersResponse,
-  AdminUserDetail,
   AdminUserByIdResponse,
+  AdminUserDetail,
+  AdminUsersResponse,
 } from '@/types/member';
 import { MEMBER_STATUS_OPTIONS, MEMBER_TYPE_OPTIONS } from '@/types/member';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client/react';
+import { type ColumnDef } from '@tanstack/react-table';
+import { useCallback, useState } from 'react';
+import { toast } from 'sonner';
+
+/* ─── 날짜 포맷 ─── */
+const formatDateTime = (val?: string | null) => {
+  if (!val) return '-';
+  const d = new Date(val);
+  if (isNaN(d.getTime())) return val;
+  const yyyy = d.getFullYear();
+  const MM = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  const HH = String(d.getHours()).padStart(2, '0');
+  const mm = String(d.getMinutes()).padStart(2, '0');
+  const ss = String(d.getSeconds()).padStart(2, '0');
+  return `${yyyy}-${MM}-${dd} ${HH}:${mm}:${ss}`;
+};
 
 /* ─── 상태/가입유형 라벨 변환 ─── */
 const statusLabel = (val?: string) => {
@@ -76,25 +90,28 @@ export default function MemberPage() {
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
 
   /* ─── 검색 조건 (입력 중) ─── */
-  const [searchKeyword, setSearchKeyword] = useState('');
-  const [searchStatus, setSearchStatus] = useState('');
+  const [searchLicenseNo, setSearchLicenseNo] = useState('');
+  const [searchUserId, setSearchUserId] = useState('');
+  const [searchBirthDate, setSearchBirthDate] = useState('');
+  const [searchPhone, setSearchPhone] = useState('');
+  const [searchUserName, setSearchUserName] = useState('');
   const [searchUserType, setSearchUserType] = useState('');
 
   /* ─── 실제 적용된 필터 ─── */
   const [appliedFilter, setAppliedFilter] = useState<{
     search?: string;
-    status?: string;
     userType?: string;
   }>({});
 
   /* ─── GraphQL 목록 조회 ─── */
+  const buildFilterVars = (filter: typeof appliedFilter) => ({
+    ...(filter.search ? { search: filter.search } : {}),
+    ...(filter.userType ? { userType: filter.userType } : {}),
+  });
+
   const { data, loading, refetch } = useQuery<AdminUsersResponse>(GET_ADMIN_USERS_MEMBERS, {
     variables: {
-      filter: {
-        ...(appliedFilter.search ? { search: appliedFilter.search } : {}),
-        ...(appliedFilter.status ? { status: appliedFilter.status } : {}),
-        ...(appliedFilter.userType ? { userType: appliedFilter.userType } : {}),
-      },
+      filter: buildFilterVars(appliedFilter),
       pagination: {
         page: currentPage,
         limit: pageSize,
@@ -128,27 +145,33 @@ export default function MemberPage() {
 
   /* ─── 재검색 ─── */
   const handleSearch = useCallback(() => {
+    // 서버 필터는 search(통합검색) + userType만 지원
+    const searchTerms = [
+      searchLicenseNo.trim(),
+      searchUserId.trim(),
+      searchBirthDate.trim(),
+      searchPhone.trim(),
+      searchUserName.trim(),
+    ].filter(Boolean);
     const newFilter = {
-      search: searchKeyword.trim() || undefined,
-      status: searchStatus === '__all' ? undefined : searchStatus || undefined,
+      search: searchTerms.length > 0 ? searchTerms.join(' ') : undefined,
       userType: searchUserType === '__all' ? undefined : searchUserType || undefined,
     };
     setAppliedFilter(newFilter);
     setCurrentPage(1);
     refetch({
-      filter: {
-        ...(newFilter.search ? { search: newFilter.search } : {}),
-        ...(newFilter.status ? { status: newFilter.status } : {}),
-        ...(newFilter.userType ? { userType: newFilter.userType } : {}),
-      },
+      filter: buildFilterVars(newFilter),
       pagination: { page: 1, limit: pageSize },
     });
-  }, [searchKeyword, searchStatus, searchUserType, refetch, pageSize]);
+  }, [searchLicenseNo, searchUserId, searchBirthDate, searchPhone, searchUserName, searchUserType, refetch, pageSize]);
 
   /* ─── 검색초기화 ─── */
   const handleReset = () => {
-    setSearchKeyword('');
-    setSearchStatus('');
+    setSearchLicenseNo('');
+    setSearchUserId('');
+    setSearchBirthDate('');
+    setSearchPhone('');
+    setSearchUserName('');
     setSearchUserType('');
     setAppliedFilter({});
     setCurrentPage(1);
@@ -217,39 +240,28 @@ export default function MemberPage() {
       size: 60,
       cell: ({ row }) => (currentPage - 1) * pageSize + row.index + 1,
     },
+    { accessorKey: 'id', header: '회원번호', size: 120 },
     { accessorKey: 'userId', header: '회원아이디', size: 130 },
     { accessorKey: 'userName', header: '회원명', size: 100 },
+    { accessorKey: 'phone', header: '전화번호', size: 140 },
     {
       accessorKey: 'userType',
       header: '회원구분',
       size: 100,
       cell: ({ getValue }) => memberTypeLabel(getValue() as string),
     },
-    { accessorKey: 'email', header: '이메일', size: 180 },
-    { accessorKey: 'phone', header: '전화번호', size: 140 },
     {
-      accessorKey: 'status',
-      header: '상태',
-      size: 80,
-      cell: ({ getValue }) => {
-        const val = getValue() as string;
-        return (
-          <span
-            className={
-              val === 'ACTIVE'
-                ? 'text-src-point font-medium'
-                : val === 'WITHDRAWN'
-                  ? 'text-src-red font-medium'
-                  : ''
-            }
-          >
-            {statusLabel(val)}
-          </span>
-        );
-      },
+      id: 'licenseNo',
+      header: '의사면허번호',
+      size: 130,
+      cell: ({ row }) => row.original.profile?.licenseNo || '-',
     },
-    { accessorKey: 'hospitalCode', header: '병원코드', size: 100 },
-    { accessorKey: 'updatedAt', header: '수정일시', size: 160 },
+    {
+      accessorKey: 'createdAt',
+      header: '가입일시',
+      size: 160,
+      cell: ({ getValue }) => formatDateTime(getValue() as string),
+    },
   ];
 
   const profile = selectedUser?.profile;
@@ -262,12 +274,40 @@ export default function MemberPage() {
         onSearch={handleSearch}
         onReset={handleReset}
         searchSection={
-          <div className="grid grid-cols-4 gap-x-6 gap-y-4">
-            <FieldGroup label="검색">
+          <div className="grid grid-cols-3 gap-x-6 gap-y-4">
+            <FieldGroup label="의사면허번호">
               <Input
-                value={searchKeyword}
-                onChange={(e) => setSearchKeyword(e.target.value)}
-                placeholder="아이디, 이름, 이메일 검색"
+                value={searchLicenseNo}
+                onChange={(e) => setSearchLicenseNo(e.target.value)}
+                placeholder="의사면허번호"
+              />
+            </FieldGroup>
+            <FieldGroup label="회원아이디">
+              <Input
+                value={searchUserId}
+                onChange={(e) => setSearchUserId(e.target.value)}
+                placeholder="회원아이디"
+              />
+            </FieldGroup>
+            <FieldGroup label="생년월일">
+              <Input
+                value={searchBirthDate}
+                onChange={(e) => setSearchBirthDate(e.target.value)}
+                placeholder="YYYY-MM-DD"
+              />
+            </FieldGroup>
+            <FieldGroup label="휴대전화번호">
+              <Input
+                value={searchPhone}
+                onChange={(e) => setSearchPhone(e.target.value)}
+                placeholder="휴대전화번호"
+              />
+            </FieldGroup>
+            <FieldGroup label="회원명">
+              <Input
+                value={searchUserName}
+                onChange={(e) => setSearchUserName(e.target.value)}
+                placeholder="회원명"
               />
             </FieldGroup>
             <FieldGroup label="회원구분">
@@ -277,20 +317,6 @@ export default function MemberPage() {
                 </SelectTrigger>
                 <SelectContent>
                   {MEMBER_TYPE_OPTIONS.map((opt) => (
-                    <SelectItem key={opt.value || '__all'} value={opt.value || '__all'}>
-                      {opt.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </FieldGroup>
-            <FieldGroup label="회원상태">
-              <Select value={searchStatus} onValueChange={setSearchStatus}>
-                <SelectTrigger>
-                  <SelectValue placeholder="전체" />
-                </SelectTrigger>
-                <SelectContent>
-                  {MEMBER_STATUS_OPTIONS.map((opt) => (
                     <SelectItem key={opt.value || '__all'} value={opt.value || '__all'}>
                       {opt.label}
                     </SelectItem>
@@ -333,16 +359,16 @@ export default function MemberPage() {
               </div>
             ) : selectedUser ? (
               <>
-                {/* ─── Row 1: 회원ID, 회원명, 이메일 ─── */}
+                {/* ─── Row 1: 회원ID, 회원번호, 회원명 ─── */}
                 <div className="grid grid-cols-3 gap-4">
-                  <FieldGroup label="회원아이디">
+                  <FieldGroup label="회원ID">
                     <Input value={selectedUser.userId} disabled />
+                  </FieldGroup>
+                  <FieldGroup label="회원번호">
+                    <Input value={selectedUser.id || '-'} disabled />
                   </FieldGroup>
                   <FieldGroup label="회원명">
                     <Input value={selectedUser.userName} disabled />
-                  </FieldGroup>
-                  <FieldGroup label="이메일">
-                    <Input value={selectedUser.email} disabled />
                   </FieldGroup>
                 </div>
 
@@ -399,7 +425,7 @@ export default function MemberPage() {
                 </FieldGroup>
 
                 {/* ─── 이메일, 휴대전화번호 ─── */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-3 gap-4">
                   <FieldGroup label="이메일">
                     <Input value={selectedUser.email} disabled />
                   </FieldGroup>
@@ -449,9 +475,10 @@ export default function MemberPage() {
                 </div>
 
                 {/* ─── 병원정보 섹션 ─── */}
-                <div className="border-t border-gray-500 pt-5">
-                  <h3 className="text-base font-semibold mb-4">병원정보</h3>
-                  <div className="space-y-4">
+                <div className="-mx-6 border-y border-gray-300 px-6 py-3">
+                  <h3 className="text-sm font-semibold">병원정보</h3>
+                </div>
+                <div className="space-y-4">
                     <div className="grid grid-cols-3 gap-4">
                       <FieldGroup label="병원명">
                         <Input value={profile?.hospName || ''} disabled />
@@ -463,56 +490,44 @@ export default function MemberPage() {
                         <Input value={profile?.hospPhone || ''} disabled />
                       </FieldGroup>
                     </div>
-                    <FieldGroup label="병원주소">
-                      <div className="flex gap-2">
-                        <Input value={profile?.hospAddress || ''} disabled className="flex-1" />
-                        <Input value={profile?.hospAddressDetail || ''} disabled className="flex-1" />
-                      </div>
-                    </FieldGroup>
+                    <div className="grid grid-cols-3 gap-4">
+                      <FieldGroup label="우편번호">
+                        <Input value={profile?.hospZipCode || ''} disabled />
+                      </FieldGroup>
+                      <FieldGroup label="주소">
+                        <Input value={profile?.hospAddress || ''} disabled />
+                      </FieldGroup>
+                      <FieldGroup label="상세주소">
+                        <Input value={profile?.hospAddressDetail || ''} disabled />
+                      </FieldGroup>
+                    </div>
                     <FieldGroup label="병원 홈페이지 주소">
                       <Input value={profile?.hospWebsite || ''} disabled />
                     </FieldGroup>
                   </div>
-                </div>
 
-                {/* ─── 상태 정보 테이블 ─── */}
-                <div className="overflow-hidden rounded-lg border border-gray-500">
-                  <table className="w-full text-sm">
-                    <tbody>
-                      <tr className="border-b border-gray-500">
-                        <th className="bg-gray-300 px-4 py-2.5 text-left font-semibold whitespace-nowrap">
-                          회원상태
-                        </th>
-                        <td className="px-4 py-2.5">
-                          <span
-                            className={
-                              selectedUser.status === 'ACTIVE'
-                                ? 'text-src-point font-medium'
-                                : selectedUser.status === 'WITHDRAWN'
-                                  ? 'text-src-red font-medium'
-                                  : ''
-                            }
-                          >
-                            {statusLabel(selectedUser.status)}
-                          </span>
-                        </td>
-                        <th className="bg-gray-300 px-4 py-2.5 text-left font-semibold whitespace-nowrap">
-                          병원코드
-                        </th>
-                        <td className="px-4 py-2.5">{selectedUser.hospitalCode || '-'}</td>
-                        <th className="bg-gray-300 px-4 py-2.5 text-left font-semibold whitespace-nowrap">
-                          가입일시
-                        </th>
-                        <td className="px-4 py-2.5">{selectedUser.createdAt || '-'}</td>
-                      </tr>
-                      <tr>
-                        <th className="bg-gray-300 px-4 py-2.5 text-left font-semibold whitespace-nowrap">
-                          수정일시
-                        </th>
-                        <td className="px-4 py-2.5" colSpan={5}>{selectedUser.updatedAt || '-'}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                {/* ─── 상태 정보 ─── */}
+                <div className="grid grid-cols-3 gap-4">
+                  <FieldGroup label="회원상태">
+                    <Input value={statusLabel(selectedUser.status)} disabled />
+                  </FieldGroup>
+                  <FieldGroup label="회원정보 수정일시">
+                    <Input value={formatDateTime(selectedUser.updatedAt)} disabled />
+                  </FieldGroup>
+                  <FieldGroup label="회원 가입일시">
+                    <Input value={formatDateTime(selectedUser.createdAt)} disabled />
+                  </FieldGroup>
+                </div>
+                <div className="grid grid-cols-3 gap-4">
+                  <FieldGroup label="회원탈퇴 일시">
+                    <Input value={formatDateTime(selectedUser.withdrawnAt)} disabled />
+                  </FieldGroup>
+                  <FieldGroup label="마지막 로그인 일시">
+                    <Input value={formatDateTime(selectedUser.lastLoginAt)} disabled />
+                  </FieldGroup>
+                  <FieldGroup label="마지막 로그인 IP">
+                    <Input value={selectedUser.lastLoginIp || '-'} disabled />
+                  </FieldGroup>
                 </div>
 
                 {/* ─── 비고 ─── */}

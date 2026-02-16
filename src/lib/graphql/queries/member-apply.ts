@@ -9,9 +9,15 @@ export const GET_ADMIN_USERS = gql`
         userId
         userName
         email
+        phone
         userType
         status
         hospitalCode
+        createdAt
+        updatedAt
+        profile {
+          licenseNo
+        }
       }
       totalCount
       hasNextPage

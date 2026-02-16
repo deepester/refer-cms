@@ -12,6 +12,9 @@ export interface AdminUser {
   hospitalCode?: string;
   createdAt?: string;
   updatedAt?: string;
+  profile?: {
+    licenseNo?: string;
+  };
 }
 
 /** adminUsers API 응답 */
@@ -51,6 +54,9 @@ export interface UserProfile {
 export interface AdminUserDetail extends AdminUser {
   mustChangePw: boolean;
   rejectReason?: string;
+  lastLoginAt?: string;
+  lastLoginIp?: string;
+  withdrawnAt?: string;
   profile?: UserProfile;
 }
 

@@ -10,6 +10,16 @@ export const LOGIN = gql`
   }
 `;
 
+/** 토큰 갱신 */
+export const REFRESH_TOKEN = gql`
+  mutation RefreshToken($refreshToken: String!) {
+    refreshToken(refreshToken: $refreshToken) {
+      accessToken
+      refreshToken
+    }
+  }
+`;
+
 /** 로그아웃 */
 export const LOGOUT = gql`
   mutation Logout {

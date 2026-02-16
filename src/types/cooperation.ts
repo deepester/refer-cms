@@ -15,10 +15,11 @@ export interface HospitalModel {
   /** H: 협력병원, M: 협력의원 */
   partnerType?: 'H' | 'M';
   classificationCode?: string;
+  phisCode?: string;
   hospitalCode?: string;
 }
 
-/** 협력병의원 신청 모델 */
+/** 협력병의원 신청 모델 (목록용 기본 필드) */
 export interface PartnerApplicationModel {
   id: string;
   status: PartnerStatus;
@@ -29,12 +30,82 @@ export interface PartnerApplicationModel {
   staffEmail?: string;
   directorName?: string;
   directorPhone?: string;
+  directorLicenseNo?: string;
+  institutionType?: string;
   approvedAt?: string;
   reviewedAt?: string;
+  reviewedById?: string;
   rejectReason?: string;
   createdAt: string;
   updatedAt: string;
   hospital: HospitalModel;
+}
+
+/** 협력병의원 신청 상세 모델 (PartnerHospitalModel) */
+export interface PartnerApplicationDetail extends PartnerApplicationModel {
+  /* 병원장 추가 정보 */
+  directorBirthDate?: string;
+  directorGender?: string;
+  directorEmail?: string;
+  directorSchool?: string;
+  directorGraduationYear?: string;
+  directorTrainingHospital?: string;
+  directorDepartment?: string;
+  directorSubSpecialty?: string;
+  directorCarNo?: string;
+  directorEmailConsent?: boolean;
+  directorSmsConsent?: boolean;
+  directorReplyConsent?: boolean;
+  isDirector?: boolean;
+  /* 실무자 추가 */
+  staffPosition?: string;
+  staffTel?: string;
+  staffDeptType?: string;
+  staffDeptValue?: string;
+  /* 기타 */
+  remarks?: string;
+  attachments?: Array<{ url?: string; filename?: string; name?: string; originalName?: string }> | unknown;
+  /* 체크리스트: 병상 운영 현황 */
+  activeBedCount?: number;
+  totalBedCount?: number;
+  premiumRoomCount?: number;
+  multiRoomCount?: number;
+  icuCount?: number;
+  erCount?: number;
+  /* 인력 현황 */
+  nurseCount?: number;
+  specialistCount?: number;
+  totalStaffCount?: number;
+  /* 시설 운영 현황 */
+  hasDialysisRoom?: boolean;
+  hasEr?: boolean;
+  hasHospice?: boolean;
+  hasIcu?: boolean;
+  hasOperatingRoom?: boolean;
+  hasPhysicalTherapy?: boolean;
+  hasPsychClosed?: boolean;
+  hasPsychGeneral?: boolean;
+  /* 간병시스템 */
+  hasIntegratedNursing?: boolean;
+  hasGuardianCare?: boolean;
+  hasSharedCare?: boolean;
+  /* 격리병상 */
+  hasRehabIsolation?: boolean;
+  hasRehabOt?: boolean;
+  hasRehabPt?: boolean;
+  hasRehabSt?: boolean;
+  hasRehabSwallow?: boolean;
+  isolationRoomCount?: number;
+  isolationSingleCount?: number;
+  isolationDoubleCount?: number;
+  isolationTripleCount?: number;
+  isolationTypes?: unknown;
+  isolationCareType?: string;
+  isolationRehabType?: string;
+  /* 장비 & 처치 */
+  majorEquipment?: string;
+  availableTreatments?: unknown;
+  departmentSpecialists?: unknown;
 }
 
 /** 신청 목록 응답 */
@@ -48,7 +119,7 @@ export interface AdminPartnerApplicationsResponse {
 
 /** 신청 상세 응답 */
 export interface AdminPartnerApplicationByIdResponse {
-  adminPartnerApplicationById: PartnerApplicationModel;
+  adminPartnerApplicationById: PartnerApplicationDetail;
 }
 
 /* ─── Enum ─── */
